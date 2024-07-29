@@ -11,9 +11,9 @@ class_name Jump
 ## how many frames acceleration can be applied, after this holding jump will not do anythig;
 ## this also defines that maximum jump velocity will probably only be achieved by holding jump for 8 frames,
 ## and that holding jump less frames than that will do a smaller jump
-@export var jump_max_acceleration_frames := 10.0
+@export var jump_max_acceleration_frames := 6.0
 ## gravity multiplier when jump is released to fall faster at that rate and control better landing
-@export var jump_release_gravity_multiplier := 2.0
+@export var jump_release_gravity_multiplier := 2.5
 ## general gravity multiplier for jump (useful for trying to make jump more dynamic and less floaty)
 @export var gravity_multiplier := 1.5
 ## horizontal movement speed while jumping
@@ -44,7 +44,6 @@ func _exit() -> Dictionary:
 	return {}
 
 func _physics_update(delta: float) -> void:
-	print(delta)
 	if not released_jump:
 		released_jump = not Input.is_action_pressed("jump")
 	if not released_jump and player.velocity.y > jump_max_velocity and jump_frames < jump_max_acceleration_frames:
