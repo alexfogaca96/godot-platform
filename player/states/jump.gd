@@ -26,7 +26,7 @@ class_name Jump
 
 @onready var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var jump_frames := 0
+var jump_frames := 0.0
 var jump_acceleration_frame_percentage := 1.0 / jump_max_acceleration_frames
 var released_jump := false
 
@@ -47,7 +47,7 @@ func _physics_update(delta: float) -> void:
 	if not released_jump:
 		released_jump = not Input.is_action_pressed("jump")
 	if not released_jump and player.velocity.y > jump_max_velocity and jump_frames < jump_max_acceleration_frames:
-		jump_frames += 1
+		jump_frames += 1.0
 		text_debug.text = str("jump frame ", jump_frames)
 		var acceleration = lerp(jump_start_acceleration, jump_end_acceleration, jump_frames * jump_acceleration_frame_percentage)
 		player.velocity.y = clamp(player.velocity.y + acceleration, jump_max_velocity, 0)
