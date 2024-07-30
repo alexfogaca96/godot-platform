@@ -270,15 +270,12 @@ text_debug = NodePath("../../DebugState")
 
 [node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
 script = ExtResource("53_6s7i0")
-horizontal_speed = 630.0
 player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
 text_debug = NodePath("../../DebugState")
 
 [node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
 script = ExtResource("53_83duh")
-fall_velocity_multiplier = 3.0
-horizontal_speed = 660.0
 player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
 text_debug = NodePath("../../DebugState")

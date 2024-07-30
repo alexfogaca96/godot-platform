@@ -10,7 +10,7 @@ class_name Jump
 ## general gravity multiplier for jump (useful for trying to make jump more dynamic and less floaty)
 @export var gravity_multiplier := 1.8
 ## horizontal movement speed while jumping
-@export var horizontal_speed := 600.0
+@export var horizontal_speed := 630.0
 
 @export_group("Components")
 @export var player: CharacterBody2D

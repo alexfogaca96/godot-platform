@@ -4,7 +4,7 @@ class_name Fall
 ## maximum falling velocity so gravity doesn't make the fall that much faster (bad experience)
 @export var fall_max_velocity := 1100.0
 ## falling velocity multiplier because falling faster makes jump more sharp
-@export var fall_velocity_multiplier := 1.8
+@export var fall_velocity_multiplier := 3
 ## how many frames the fall acceleration will be applied
 @export var fall_acceleration_frames := 10
 ## how many frames the gliding at the start of the fall takes
@@ -12,7 +12,7 @@ class_name Fall
 ## inverse multiplier for fall speed so you'll fall slowly during gliding
 @export var gliding_multipler := 0.3
 ## horizontal movement speed while falling
-@export var horizontal_speed := 650.0
+@export var horizontal_speed := 660.0
 
 @export_group("Components")
 @export var player: CharacterBody2D
