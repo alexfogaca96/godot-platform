@@ -1,21 +1,14 @@
 extends State
 class_name Jump
 
-## starting jump velocity
-@export var jump_min_velocity := -100.0
-## maximum jump velocity
-@export var jump_max_velocity := -1000.0
-## acceleration applied to jump velocity each frame jump is pressed after start (start and end are interpolated linearly)
-@export var jump_start_acceleration := -30.0
-@export var jump_end_acceleration := -400.0
-## how many frames acceleration can be applied, after this holding jump will not do anythig;
-## this also defines that maximum jump velocity will probably only be achieved by holding jump for 8 frames,
-## and that holding jump less frames than that will do a smaller jump
-@export var jump_max_acceleration_frames := 6.0
-## gravity multiplier when jump is released to fall faster at that rate and control better landing
-@export var jump_release_gravity_multiplier := 2.5
+## jump velocity applied at beggining of jump
+@export var jump_velocity := -1100.0
+## how many frames it will take to slow down jump velocity after releasing jump
+@export var jump_release_slowdown_velocity_frames := 10
+## when jump reaches this min velocity it releases the jump forcefully so you don't have to hold jump forever to jump longer
+@export var jump_force_release_max_velocity := -600.0
 ## general gravity multiplier for jump (useful for trying to make jump more dynamic and less floaty)
-@export var gravity_multiplier := 1.5
+@export var gravity_multiplier := 1.8
 ## horizontal movement speed while jumping
 @export var horizontal_speed := 600.0
 
@@ -26,16 +19,16 @@ class_name Jump
 
 @onready var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var jump_frames := 0.0
-var jump_acceleration_frame_percentage := 1.0 / jump_max_acceleration_frames
-var released_jump := false
+var released_jump: bool
+var jump_released_frames: int
+var initial_released_jump_velocity: float
 
 
 func _enter(_args: Dictionary = {}) -> void:
-	animated_sprite.play("jump")
-	player.velocity.y = jump_min_velocity
-	jump_frames = 0
+	player.velocity.y = jump_velocity
 	released_jump = false
+	jump_released_frames = 0
+	animated_sprite.play("jump")
 	text_debug.text = "jump"
 
 
@@ -46,22 +39,18 @@ func _exit() -> Dictionary:
 func _physics_update(delta: float) -> void:
 	if not released_jump:
 		released_jump = not Input.is_action_pressed("jump")
-	if not released_jump and player.velocity.y > jump_max_velocity and jump_frames < jump_max_acceleration_frames:
-		jump_frames += 1.0
-		text_debug.text = str("jump frame ", jump_frames)
-		var acceleration = lerp(jump_start_acceleration, jump_end_acceleration, jump_frames * jump_acceleration_frame_percentage)
-		player.velocity.y = clamp(player.velocity.y + acceleration, jump_max_velocity, 0)
-		if player.velocity.y == jump_max_velocity:
-			text_debug.text = "jump max"
-			jump_frames = jump_max_acceleration_frames
+		if player.velocity.y > jump_force_release_max_velocity:
+			released_jump = true
 	
-	if released_jump:
-		text_debug.text = "jump released"
-		player.velocity.y += gravity * delta * jump_release_gravity_multiplier
-	else:
+	if not released_jump:
 		player.velocity.y += gravity * delta * gravity_multiplier
+	else:
+		if jump_released_frames == 0:
+			initial_released_jump_velocity = player.velocity.y
+		jump_released_frames += 1
+		player.velocity.y = lerp(initial_released_jump_velocity, 0.0, float(jump_released_frames) / float(jump_release_slowdown_velocity_frames))
 	
-	if player.velocity.y > 0:
+	if player.velocity.y >= 0:
 		transitioned.emit(self, "fall")
 		return
 	

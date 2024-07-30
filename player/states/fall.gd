@@ -27,9 +27,9 @@ var current_gliding_frames := 0
 
 
 func _enter(_args: Dictionary = {}) -> void:
-	animated_sprite.play("idle")
 	current_fall_acceleration_frames = 0
 	current_gliding_frames = 0
+	animated_sprite.play("idle")
 	text_debug.text = "fall"
 
 func _exit() -> Dictionary:
