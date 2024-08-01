@@ -17,7 +17,7 @@ class_name Jump
 @export var animated_sprite: AnimatedSprite2D
 @export var text_debug: Label
 
-@onready var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var released_jump: bool
 var jump_released_frames: int
@@ -30,7 +30,10 @@ func _enter(_args: Dictionary = {}) -> void:
 	jump_released_frames = 0
 	animated_sprite.play("jump")
 	text_debug.text = "jump"
-
+	if _args.has("jump_buffer"):
+		text_debug.text += " buffered"
+	elif _args.has("coyote_time"):
+		text_debug.text += " coyote time"
 
 func _exit() -> Dictionary:
 	animated_sprite.stop()

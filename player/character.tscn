@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://blamhwr827jux"]
+[gd_scene load_steps=59 format=3 uid="uid://blamhwr827jux"]
 
 [ext_resource type="Texture2D" uid="uid://cyakr6u8f1t14" path="res://player/animations/idle/idle00000.png" id="2_8gncx"]
 [ext_resource type="Texture2D" uid="uid://dacsinrpm0s0g" path="res://player/animations/walk/walk00000.png" id="2_qrfns"]
@@ -223,9 +223,16 @@ script/source = "extends AnimatedSprite2D
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ok6mt"]
-size = Vector2(23.1662, 19.9751)
+size = Vector2(48, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_htnfd"]
+size = Vector2(20, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7htos"]
+size = Vector2(20, 10)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
+collision_layer = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
@@ -236,15 +243,14 @@ frame_progress = 1.0
 script = SubResource("GDScript_22qqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-6.55651e-07, 17.5)
-scale = Vector2(2.15832, 5.05629)
+position = Vector2(0, 18)
 shape = SubResource("RectangleShape2D_ok6mt")
 
 [node name="DebugState" type="Label" parent="."]
-offset_left = -69.0
+offset_left = -70.0
 offset_top = -151.0
-offset_right = -39.0
-offset_bottom = -126.0
+offset_right = -40.0
+offset_bottom = -121.0
 scale = Vector2(4.77799, 2.97231)
 theme_override_font_sizes/font_size = 12
 text = "Idle"
@@ -262,11 +268,13 @@ player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
 text_debug = NodePath("../../DebugState")
 
-[node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
+[node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug", "left_foot_area", "right_foot_area")]
 script = ExtResource("52_8rmi2")
 player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
 text_debug = NodePath("../../DebugState")
+left_foot_area = NodePath("../../MovementCollisionChecks/LeftFoot")
+right_foot_area = NodePath("../../MovementCollisionChecks/RightFoot")
 
 [node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
 script = ExtResource("53_6s7i0")
@@ -279,3 +287,20 @@ script = ExtResource("53_83duh")
 player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
 text_debug = NodePath("../../DebugState")
+
+[node name="MovementCollisionChecks" type="Node2D" parent="."]
+
+[node name="LeftFoot" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/LeftFoot"]
+position = Vector2(-14, 73)
+shape = SubResource("RectangleShape2D_htnfd")
+
+[node name="RightFoot" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/RightFoot"]
+position = Vector2(14, 73)
+scale = Vector2(1.00656, 1)
+shape = SubResource("RectangleShape2D_7htos")

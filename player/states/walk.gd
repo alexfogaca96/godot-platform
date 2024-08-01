@@ -7,6 +7,8 @@ class_name Walk
 @export var player: CharacterBody2D
 @export var animated_sprite: AnimatedSprite2D
 @export var text_debug: Label
+@export var left_foot_area: Area2D
+@export var right_foot_area: Area2D
 
 
 func _enter(_args: Dictionary = {}) -> void:
@@ -33,8 +35,14 @@ func _physics_update(_delta: float) -> void:
 	
 	if player.velocity.x < 0:
 		animated_sprite.flip_h = true
-	elif player.velocity.x > 0:
+	else:
 		animated_sprite.flip_h = false
+	
+	var safe_walk = Input.is_action_pressed("safe_walk")
+	if safe_walk:
+		var area = left_foot_area if player.velocity.x < 0 else right_foot_area
+		if not area.has_overlapping_bodies():
+			player.velocity.x = 0
 	
 	player.move_and_slide()
 	

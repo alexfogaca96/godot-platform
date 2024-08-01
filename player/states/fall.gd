@@ -13,32 +13,56 @@ class_name Fall
 @export var gliding_multipler := 0.3
 ## horizontal movement speed while falling
 @export var horizontal_speed := 660.0
+## how many frames to consider a jump input buffer, so you don't have to be super precise with landing and hitting jump
+@export var jump_buffer_frames := 10
+## this enables coyote time, so players are able to jump right at the beginning of falling
+@export var initial_frames_to_jump := 12
 
 @export_group("Components")
 @export var player: CharacterBody2D
 @export var animated_sprite: AnimatedSprite2D
 @export var text_debug: Label
 
-@onready var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var fall_acceleration_per_frame = (fall_velocity_multiplier - 1.0) / fall_acceleration_frames
-var current_fall_acceleration_frames := 0
-var current_gliding_frames := 0
+var fall_acceleration_per_frame := (fall_velocity_multiplier - 1.0) / fall_acceleration_frames
+var current_fall_acceleration_frames: int
+var current_gliding_frames: int
+var jump_if_grounded_in_frames: int
+var current_frame: int
 
 
 func _enter(_args: Dictionary = {}) -> void:
 	current_fall_acceleration_frames = 0
 	current_gliding_frames = 0
+	jump_if_grounded_in_frames = 0
+	current_frame = 0
 	animated_sprite.play("idle")
 	text_debug.text = "fall"
 
 func _exit() -> Dictionary:
 	animated_sprite.stop()
+	if current_frame <= initial_frames_to_jump:
+		return { "coyote_time": true }
+	if jump_if_grounded_in_frames > 0:
+		return { "jump_buffer": true }
 	return {}
 
 func _physics_update(delta: float) -> void:
+	current_frame += 1
+	
+	if Input.is_action_just_pressed("jump"):
+		if current_frame <= initial_frames_to_jump:
+			transitioned.emit(self, "jump")
+			return
+		jump_if_grounded_in_frames = jump_buffer_frames
+	elif jump_if_grounded_in_frames > 0:
+		jump_if_grounded_in_frames -= 1
+	
 	if player.is_on_floor():
-		if Input.get_axis("move_left", "move_right") != 0:
+		if jump_if_grounded_in_frames > 0:
+			transitioned.emit(self, "jump")
+		elif Input.get_axis("move_left", "move_right") != 0:
 			transitioned.emit(self, "walk")
 		else:
 			transitioned.emit(self, "idle")
