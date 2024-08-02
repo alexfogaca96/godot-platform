@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://blamhwr827jux"]
+[gd_scene load_steps=66 format=3 uid="uid://blamhwr827jux"]
 
 [ext_resource type="Texture2D" uid="uid://cyakr6u8f1t14" path="res://player/animations/idle/idle00000.png" id="2_8gncx"]
 [ext_resource type="Texture2D" uid="uid://dacsinrpm0s0g" path="res://player/animations/walk/walk00000.png" id="2_qrfns"]
@@ -225,6 +225,27 @@ script/source = "extends AnimatedSprite2D
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ok6mt"]
 size = Vector2(48, 100)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fb70u"]
+size = Vector2(15, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j6yup"]
+size = Vector2(18, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pxmoe"]
+size = Vector2(15, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ut1n"]
+size = Vector2(6, 92)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1gy8"]
+size = Vector2(6, 92)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l45yv"]
+size = Vector2(6, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3v7ma"]
+size = Vector2(6, 20)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_htnfd"]
 size = Vector2(30, 10)
 
@@ -245,62 +266,118 @@ script = SubResource("GDScript_22qqv")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 18)
 shape = SubResource("RectangleShape2D_ok6mt")
-
-[node name="DebugState" type="Label" parent="."]
-offset_left = -70.0
-offset_top = -151.0
-offset_right = -40.0
-offset_bottom = -121.0
-scale = Vector2(4.77799, 2.97231)
-theme_override_font_sizes/font_size = 12
-text = "Idle"
-horizontal_alignment = 1
-vertical_alignment = 1
-justification_flags = 161
+one_way_collision_margin = 0.0
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("50_ulme5")
 initial_state = NodePath("Fall")
 
-[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite")]
 script = ExtResource("51_ap1u2")
 player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
-text_debug = NodePath("../../DebugState")
 
-[node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug", "left_foot_area", "right_foot_area")]
+[node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "left_torso_area", "right_torso_area", "left_foot_area", "right_foot_area", "left_bottom_area", "right_bottom_area")]
 script = ExtResource("52_8rmi2")
+minimal_collision_bump = 15.0
 player = NodePath("../..")
 animated_sprite = NodePath("../../AnimatedSprite2D")
-text_debug = NodePath("../../DebugState")
+left_torso_area = NodePath("../../MovementCollisionChecks/LeftTorso")
+right_torso_area = NodePath("../../MovementCollisionChecks/RightTorso")
+left_foot_area = NodePath("../../MovementCollisionChecks/LeftFoot")
+right_foot_area = NodePath("../../MovementCollisionChecks/RightFoot")
+left_bottom_area = NodePath("../../MovementCollisionChecks/LeftBottom")
+right_bottom_area = NodePath("../../MovementCollisionChecks/RightBottom")
+
+[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "left_head_area", "center_head_area", "right_head_area")]
+script = ExtResource("53_6s7i0")
+bumped_head_correction_pixels = 16.5
+player = NodePath("../..")
+animated_sprite = NodePath("../../AnimatedSprite2D")
+left_head_area = NodePath("../../MovementCollisionChecks/LeftHead")
+center_head_area = NodePath("../../MovementCollisionChecks/CenterHead")
+right_head_area = NodePath("../../MovementCollisionChecks/RightHead")
+
+[node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "left_torso_area", "right_torso_area", "left_foot_area", "right_foot_area")]
+script = ExtResource("53_83duh")
+minimal_collision_bump = 15.0
+player = NodePath("../..")
+animated_sprite = NodePath("../../AnimatedSprite2D")
+left_torso_area = NodePath("../../MovementCollisionChecks/LeftTorso")
+right_torso_area = NodePath("../../MovementCollisionChecks/RightTorso")
 left_foot_area = NodePath("../../MovementCollisionChecks/LeftFoot")
 right_foot_area = NodePath("../../MovementCollisionChecks/RightFoot")
 
-[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
-script = ExtResource("53_6s7i0")
-player = NodePath("../..")
-animated_sprite = NodePath("../../AnimatedSprite2D")
-text_debug = NodePath("../../DebugState")
-
-[node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animated_sprite", "text_debug")]
-script = ExtResource("53_83duh")
-player = NodePath("../..")
-animated_sprite = NodePath("../../AnimatedSprite2D")
-text_debug = NodePath("../../DebugState")
-
 [node name="MovementCollisionChecks" type="Node2D" parent="."]
+
+[node name="LeftHead" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/LeftHead"]
+position = Vector2(-16.5, -47)
+shape = SubResource("RectangleShape2D_fb70u")
+one_way_collision_margin = 0.0
+
+[node name="CenterHead" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/CenterHead"]
+position = Vector2(0, -47)
+shape = SubResource("RectangleShape2D_j6yup")
+one_way_collision_margin = 0.0
+
+[node name="RightHead" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/RightHead"]
+position = Vector2(16.5, -47)
+shape = SubResource("RectangleShape2D_pxmoe")
+one_way_collision_margin = 0.0
+
+[node name="LeftTorso" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/LeftTorso"]
+position = Vector2(-27, 2)
+shape = SubResource("RectangleShape2D_0ut1n")
+one_way_collision_margin = 0.0
+
+[node name="RightTorso" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/RightTorso"]
+position = Vector2(27, 2)
+shape = SubResource("RectangleShape2D_s1gy8")
+one_way_collision_margin = 0.0
 
 [node name="LeftFoot" type="Area2D" parent="MovementCollisionChecks"]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/LeftFoot"]
-position = Vector2(-9, 73)
-shape = SubResource("RectangleShape2D_htnfd")
+position = Vector2(-27, 58)
+shape = SubResource("RectangleShape2D_l45yv")
+one_way_collision_margin = 0.0
 
 [node name="RightFoot" type="Area2D" parent="MovementCollisionChecks"]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/RightFoot"]
+position = Vector2(27, 58)
+shape = SubResource("RectangleShape2D_3v7ma")
+one_way_collision_margin = 0.0
+
+[node name="LeftBottom" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/LeftBottom"]
+position = Vector2(-9, 73)
+shape = SubResource("RectangleShape2D_htnfd")
+one_way_collision_margin = 0.0
+
+[node name="RightBottom" type="Area2D" parent="MovementCollisionChecks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementCollisionChecks/RightBottom"]
 position = Vector2(9, 73)
-scale = Vector2(1.00656, 1)
 shape = SubResource("RectangleShape2D_7htos")
+one_way_collision_margin = 0.0

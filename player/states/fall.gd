@@ -17,11 +17,16 @@ class_name Fall
 @export var jump_buffer_frames := 10
 ## this enables coyote time, so players are able to jump right at the beginning of falling
 @export var initial_frames_to_jump := 12
+## how many pixels player will be moved up when facing a small collision at their feet and no collision on their torso/head
+@export var minimal_collision_bump := -10.0
 
 @export_group("Components")
 @export var player: CharacterBody2D
 @export var animated_sprite: AnimatedSprite2D
-@export var text_debug: Label
+@export var left_torso_area: Area2D
+@export var right_torso_area: Area2D
+@export var left_foot_area: Area2D
+@export var right_foot_area: Area2D
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -36,9 +41,8 @@ func _enter(_args: Dictionary = {}) -> void:
 	current_fall_acceleration_frames = 0
 	current_gliding_frames = 0
 	jump_if_grounded_in_frames = 0
-	current_frame = 0
+	current_frame = initial_frames_to_jump if _args.has("jump") else 0
 	animated_sprite.play("idle")
-	text_debug.text = "fall"
 
 func _exit() -> Dictionary:
 	animated_sprite.stop()
@@ -88,5 +92,10 @@ func _physics_update(delta: float) -> void:
 		animated_sprite.flip_h = true
 	elif player.velocity.x > 0:
 		animated_sprite.flip_h = false
+	
+	if player.velocity.x < 0 and left_foot_area.has_overlapping_bodies() and not left_torso_area.has_overlapping_bodies():
+		player.position.y -= minimal_collision_bump
+	elif player.velocity.x > 0 and right_foot_area.has_overlapping_bodies() and not right_torso_area.has_overlapping_bodies():
+		player.position.y -= minimal_collision_bump
 	
 	player.move_and_slide()

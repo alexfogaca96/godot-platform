@@ -4,12 +4,10 @@ class_name Idle
 @export_group("Components")
 @export var player: CharacterBody2D
 @export var animated_sprite: AnimatedSprite2D
-@export var text_debug: Label
 
 
 func _enter(_args: Dictionary = {}) -> void:
 	animated_sprite.play("idle")
-	text_debug.text = "idle"
 
 func _exit() -> Dictionary:
 	animated_sprite.stop()

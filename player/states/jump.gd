@@ -11,11 +11,15 @@ class_name Jump
 @export var gravity_multiplier := 1.8
 ## horizontal movement speed while jumping
 @export var horizontal_speed := 630.0
+## how many pixels player will be dislocated when bumping head on jump
+@export var bumped_head_correction_pixels := 10.0
 
 @export_group("Components")
 @export var player: CharacterBody2D
 @export var animated_sprite: AnimatedSprite2D
-@export var text_debug: Label
+@export var left_head_area: Area2D
+@export var center_head_area: Area2D
+@export var right_head_area: Area2D
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -29,15 +33,10 @@ func _enter(_args: Dictionary = {}) -> void:
 	released_jump = false
 	jump_released_frames = 0
 	animated_sprite.play("jump")
-	text_debug.text = "jump"
-	if _args.has("jump_buffer"):
-		text_debug.text += " buffered"
-	elif _args.has("coyote_time"):
-		text_debug.text += " coyote time"
 
 func _exit() -> Dictionary:
 	animated_sprite.stop()
-	return {}
+	return { "jump": true }
 
 func _physics_update(delta: float) -> void:
 	if not released_jump:
@@ -67,6 +66,14 @@ func _physics_update(delta: float) -> void:
 		animated_sprite.flip_h = true
 	elif player.velocity.x > 0:
 		animated_sprite.flip_h = false
+	
+	if not center_head_area.has_overlapping_bodies():
+		var left = left_head_area.has_overlapping_bodies()
+		var right = right_head_area.has_overlapping_bodies()
+		if left and not right and player.velocity.x >= 0:
+			player.position.x += bumped_head_correction_pixels
+		elif right and not left and player.velocity.x <= 0:
+			player.position.x -= bumped_head_correction_pixels
 	
 	player.move_and_slide()
 
