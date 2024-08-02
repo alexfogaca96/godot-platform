@@ -2,7 +2,7 @@ extends State
 class_name Jump
 
 ## jump velocity applied at beggining of jump
-@export var jump_velocity := -1100.0
+@export var jump_velocity := -1080.0
 ## how many frames it will take to slow down jump velocity after releasing jump
 @export var jump_release_slowdown_velocity_frames := 10
 ## when jump reaches this min velocity it releases the jump forcefully so you don't have to hold jump forever to jump longer
