@@ -18,7 +18,7 @@ class_name Fall
 ## this enables coyote time, so players are able to jump right at the beginning of falling
 @export var initial_frames_to_jump := 12
 ## how many pixels player will be moved up when facing a small collision at their feet and no collision on their torso/head
-@export var minimal_collision_bump := -10.0
+@export var minimal_collision_bump := 15.0
 
 @export_group("Components")
 @export var player: CharacterBody2D

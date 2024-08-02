@@ -60,7 +60,6 @@ player = NodePath("../..")
 
 [node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "left_torso_area", "right_torso_area", "left_foot_area", "right_foot_area", "left_bottom_area", "right_bottom_area")]
 script = ExtResource("52_8rmi2")
-minimal_collision_bump = 15.0
 player = NodePath("../..")
 left_torso_area = NodePath("../../MovementCollisionChecks/LeftTorso")
 right_torso_area = NodePath("../../MovementCollisionChecks/RightTorso")
@@ -71,8 +70,6 @@ right_bottom_area = NodePath("../../MovementCollisionChecks/RightBottom")
 
 [node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "left_head_area", "center_head_area", "right_head_area")]
 script = ExtResource("53_6s7i0")
-jump_velocity = -1090.0
-bumped_head_correction_pixels = 16.5
 player = NodePath("../..")
 left_head_area = NodePath("../../MovementCollisionChecks/LeftHead")
 center_head_area = NodePath("../../MovementCollisionChecks/CenterHead")
@@ -80,7 +77,6 @@ right_head_area = NodePath("../../MovementCollisionChecks/RightHead")
 
 [node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "left_torso_area", "right_torso_area", "left_foot_area", "right_foot_area")]
 script = ExtResource("53_83duh")
-minimal_collision_bump = 15.0
 player = NodePath("../..")
 left_torso_area = NodePath("../../MovementCollisionChecks/LeftTorso")
 right_torso_area = NodePath("../../MovementCollisionChecks/RightTorso")

@@ -2,7 +2,7 @@ extends State
 class_name Jump
 
 ## jump velocity applied at beggining of jump
-@export var jump_velocity := -1100.0
+@export var jump_velocity := -1090.0
 ## how many frames it will take to slow down jump velocity after releasing jump
 @export var jump_release_slowdown_velocity_frames := 10
 ## when jump reaches this min velocity it releases the jump forcefully so you don't have to hold jump forever to jump longer
@@ -12,7 +12,7 @@ class_name Jump
 ## horizontal movement speed while jumping
 @export var horizontal_speed := 630.0
 ## how many pixels player will be dislocated when bumping head on jump
-@export var bumped_head_correction_pixels := 10.0
+@export var bumped_head_correction_pixels := 16.5
 
 @export_group("Components")
 @export var player: CharacterBody2D
