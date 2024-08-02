@@ -16,7 +16,6 @@ class_name Jump
 
 @export_group("Components")
 @export var player: CharacterBody2D
-@export var animated_sprite: AnimatedSprite2D
 @export var left_head_area: Area2D
 @export var center_head_area: Area2D
 @export var right_head_area: Area2D
@@ -32,10 +31,8 @@ func _enter(_args: Dictionary = {}) -> void:
 	player.velocity.y = jump_velocity
 	released_jump = false
 	jump_released_frames = 0
-	animated_sprite.play("jump")
 
 func _exit() -> Dictionary:
-	animated_sprite.stop()
 	return { "jump": true }
 
 func _physics_update(delta: float) -> void:
@@ -61,11 +58,6 @@ func _physics_update(delta: float) -> void:
 		player.velocity.x = walk_direction * horizontal_speed
 	else:
 		player.velocity.x = move_toward(player.velocity.x, 0, horizontal_speed)
-	
-	if player.velocity.x < 0:
-		animated_sprite.flip_h = true
-	elif player.velocity.x > 0:
-		animated_sprite.flip_h = false
 	
 	if not center_head_area.has_overlapping_bodies():
 		var left = left_head_area.has_overlapping_bodies()

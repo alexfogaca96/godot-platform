@@ -7,7 +7,6 @@ class_name Walk
 
 @export_group("Components")
 @export var player: CharacterBody2D
-@export var animated_sprite: AnimatedSprite2D
 @export var left_torso_area: Area2D
 @export var right_torso_area: Area2D
 @export var left_foot_area: Area2D
@@ -15,13 +14,6 @@ class_name Walk
 @export var left_bottom_area: Area2D
 @export var right_bottom_area: Area2D
 
-
-func _enter(_args: Dictionary = {}) -> void:
-	animated_sprite.play("walk")
-
-func _exit() -> Dictionary:
-	animated_sprite.stop()
-	return {}
 
 func _physics_update(_delta: float) -> void:
 	if not player.is_on_floor():
@@ -40,11 +32,6 @@ func _physics_update(_delta: float) -> void:
 		if player.velocity.x == 0:
 			transitioned.emit(self, "idle")
 			return
-	
-	if player.velocity.x < 0:
-		animated_sprite.flip_h = true
-	else:
-		animated_sprite.flip_h = false
 	
 	var safe_walk = Input.is_action_pressed("safe_walk")
 	if safe_walk:
