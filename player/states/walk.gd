@@ -3,7 +3,7 @@ class_name Walk
 
 @export var speed := 600.0
 ## how many pixels player will be moved up when facing a small collision at their feet and no collision on their torso/head
-@export var minimal_collision_bump := 15.0
+@export var minimal_collision_bump := 10.0
 
 @export_group("Components")
 @export var player: CharacterBody2D
