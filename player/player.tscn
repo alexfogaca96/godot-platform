@@ -1,11 +1,11 @@
 [gd_scene load_steps=17 format=3 uid="uid://blamhwr827jux"]
 
 [ext_resource type="Texture2D" uid="uid://dhi1vee3r7886" path="res://player/player.png" id="1_yqicm"]
-[ext_resource type="Script" path="res://state_machine/state_machine.gd" id="50_ulme5"]
-[ext_resource type="Script" path="res://player/states/idle.gd" id="51_ap1u2"]
-[ext_resource type="Script" path="res://player/states/walk.gd" id="52_8rmi2"]
-[ext_resource type="Script" path="res://player/states/jump.gd" id="53_6s7i0"]
-[ext_resource type="Script" path="res://player/states/fall.gd" id="53_83duh"]
+[ext_resource type="Script" uid="uid://bgmytynp3b68g" path="res://state_machine/state_machine.gd" id="50_ulme5"]
+[ext_resource type="Script" uid="uid://bpwcpmxxddw20" path="res://player/states/idle.gd" id="51_ap1u2"]
+[ext_resource type="Script" uid="uid://dexrlvv5mq151" path="res://player/states/walk.gd" id="52_8rmi2"]
+[ext_resource type="Script" uid="uid://c1ttosvnm3wl1" path="res://player/states/jump.gd" id="53_6s7i0"]
+[ext_resource type="Script" uid="uid://cysf52cahcggx" path="res://player/states/fall.gd" id="53_83duh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ok6mt"]
 size = Vector2(48, 100)

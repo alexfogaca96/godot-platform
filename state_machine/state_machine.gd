@@ -3,7 +3,7 @@ extends Node
 @export var initial_state: State
 
 var current_state: State
-var states: Dictionary = {}
+var states: Dictionary[String,State] = {}
 
 
 func _ready():
@@ -16,15 +16,15 @@ func _ready():
 		initial_state._enter()
 		current_state = initial_state
 
-func _process(delta):
+func _process(delta: float):
 	if current_state:
 		current_state._update(delta)
 
-func _physics_process(delta):
+func _physics_process(delta: float):
 	if current_state:
 		current_state._physics_update(delta)
 
-func on_child_transition(state, new_state_name):
+func on_child_transition(state: State, new_state_name: String):
 	if state != current_state:
 		return
 	

@@ -68,4 +68,3 @@ func _physics_update(delta: float) -> void:
 			player.position.x -= bumped_head_correction_pixels
 	
 	player.move_and_slide()
-
